@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\CoasterRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -10,9 +11,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class CoasterController extends AbstractController
 {
     #[Route('', name: 'list')]
-    public function list(): Response
+    public function list(CoasterRepository $coasterRepository): Response
     {
-        return new Response("Liste des attractions");
+        $coasters = $coasterRepository->findAll();
+
+        return $this->render("coaster/list.html.twig", [
+            "coasters" => $coasters,
+        ]);
     }
 
     #[Route('/{id}', name: 'view', requirements: ["id" => "\d+"])]

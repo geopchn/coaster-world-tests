@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Liste des attractions - {{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('coaster_list') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('coaster_list') }}
+{% endblock %}
+
+{% block body %}
+    <h1>Liste des attractions</h1>
+
+    <div class="coaster-list">
+        {% for coaster in coasters %}
+            <a href="{{ path('coaster_view', {id: coaster.id}) }}" class="card">
+                <img src="{{ coaster.image }}" alt="{{ coaster.name }}" class="card-image">
+                <div class="card-body">
+                    <h2 class="card-title">{{ coaster.name }}</h2>
+                    <span class="card-subtitle">{{ coaster.park.name }}</span>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}

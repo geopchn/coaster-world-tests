@@ -6,14 +6,6 @@ use App\Entity\Coaster;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Coaster>
- *
- * @method Coaster|null find($id, $lockMode = null, $lockVersion = null)
- * @method Coaster|null findOneBy(array $criteria, array $orderBy = null)
- * @method Coaster[]    findAll()
- * @method Coaster[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class CoasterRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)

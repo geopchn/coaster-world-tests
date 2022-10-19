@@ -9,6 +9,7 @@ Encore
     .setPublicPath('/build')
 
     .addEntry('app', './assets/js/app.js')
+    .addEntry('coaster_list', './assets/js/pages/coaster/list.js')
 
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
