@@ -1,0 +1,52 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    {{ coaster.name ~ ' - ' ~ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('coaster_view') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('coaster_view') }}
+{% endblock %}
+
+{% block body %}
+    <div class="view">
+        <h1 class="view-title">{{ coaster.name }}</h1>
+        <a href="{{ path('park_view', {id: coaster.park.id}) }}" class="view-subtitle">
+            {{ coaster.park.name }}
+        </a>
+
+        <div class="view-details">
+            <img src="{{ coaster.image }}" alt="{{ coaster.name }}">
+            <ul class="view-specs">
+                <li data-icon="&#xf85e">{{ coaster.manufacturer.name }}</li>
+                <li data-icon="&#xf073">{{ coaster.openedAt ? coaster.openedAt|date("m/Y") : "Prochainement" }}</li>
+                <li data-icon="&#xf253">{{ coaster.duration|date("i \\m\\i\\n s") }}</li>
+                {% if coaster.minimumHeight or coaster.maximumHeight %}
+                    <li data-icon="&#xf07d">
+                        {% if coaster.minimumHeight %}
+                            Min : {{ coaster.minimumHeight }} cm
+                        {% endif %}
+                        {% if coaster.minimumHeight and coaster.maximumHeight %}
+                            /
+                        {% endif %}
+                        {% if coaster.maximumHeight %}
+                            Max : {{ coaster.maximumHeight }} cm
+                        {% endif %}
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <ul class="badge-list">
+            {% for tag in coaster.tags %}
+                <li class="badge">
+                    {{ tag.name }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

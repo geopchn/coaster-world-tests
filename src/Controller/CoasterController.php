@@ -10,10 +10,17 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/coaster', name: 'coaster_')]
 class CoasterController extends AbstractController
 {
-    #[Route('', name: 'list')]
-    public function list(CoasterRepository $coasterRepository): Response
+    private CoasterRepository $coasterRepository;
+
+    public function __construct(CoasterRepository $coasterRepository)
     {
-        $coasters = $coasterRepository->findAll();
+        $this->coasterRepository = $coasterRepository;
+    }
+
+    #[Route('', name: 'list')]
+    public function list(): Response
+    {
+        $coasters = $this->coasterRepository->findAll();
 
         return $this->render("coaster/list.html.twig", [
             "coasters" => $coasters,
@@ -23,7 +30,11 @@ class CoasterController extends AbstractController
     #[Route('/{id}', name: 'view', requirements: ["id" => "\d+"])]
     public function view($id): Response
     {
-        return new Response(sprintf("Page de l'attraction %s", $id));
+        $coaster = $this->coasterRepository->find($id);
+
+        return $this->render("coaster/view.html.twig", [
+            "coaster" => $coaster,
+        ]);
     }
 
     #[Route('/create', name: 'create')]

@@ -1,0 +1,38 @@
+.view{
+    .view-title, .view-subtitle{
+        display: block;
+        text-align: center;
+        margin: 5px 0;
+    }
+
+    .view-details{
+        margin-top: 10px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+
+        & > img{
+            width: 100%;
+        }
+
+        .view-specs{
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+            font-size: 1.2rem;
+
+            & > li{
+                padding: 10px;
+
+                &:before{
+                    content: attr(data-icon);
+                    font-family: "Font Awesome 5 Free", sans-serif;
+                    font-weight: 900;
+                    font-size: 1.4rem;
+                    padding-right: 10px;
+                    color: var(--color-tertiary);
+                }
+            }
+        }
+    }
+}

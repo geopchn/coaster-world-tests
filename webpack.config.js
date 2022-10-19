@@ -10,6 +10,7 @@ Encore
 
     .addEntry('app', './assets/js/app.js')
     .addEntry('coaster_list', './assets/js/pages/coaster/list.js')
+    .addEntry('coaster_view', './assets/js/pages/coaster/view.js')
 
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
