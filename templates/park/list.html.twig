@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Liste des parcs - {{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('park_list') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('park_list') }}
+{% endblock %}
+
+{% block body %}
+    <h1>Liste des parcs</h1>
+
+    <div class="coaster-list">
+        {% for park in parks %}
+            <a href="{{ path('park_view', {id: park.id}) }}" class="card">
+                <img src="{{ park.image }}" alt="{{ park.name }}" class="card-image">
+                <div class="card-body">
+                    <h2 class="card-title">{{ park.name }}</h2>
+                    <span class="card-subtitle">{{ park.address.city ~ ' - ' ~ park.address.country }}</span>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}

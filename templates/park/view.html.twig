@@ -1,0 +1,39 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    {{ park.name ~ ' - ' ~ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('park_view') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('park_view') }}
+{% endblock %}
+
+{% block body %}
+    <div class="view">
+        <h1 class="view-title">{{ park.name }}</h1>
+        <div class="view-subtitle">
+            {{ park.address }}
+        </div>
+
+        <div class="view-details">
+            <img src="{{ park.image }}" alt="{{ park.name }}">
+            <ul class="view-specs">
+                <li data-icon="&#xf0b0">{{ park.type }}</li>
+                {% if park.website %}
+                    <li data-icon="&#xf35d">
+                        <a href="{{ park.website }}">
+                            {{ park.website }}
+                        </a>
+                    </li>
+                {% endif %}
+                <li data-icon="&#xf238">
+                    {{ park.coasters|length }} attraction(s)
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

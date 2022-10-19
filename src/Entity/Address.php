@@ -77,4 +77,13 @@ class Address
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        $diplayed = $this->street ? $this->street . ' - ' : '';
+        $diplayed .= $this->zipcode ? $this->zipcode . ' ' : '';
+        $diplayed .= $this->city . ' ' . $this->country;
+
+        return $diplayed;
+    }
 }
