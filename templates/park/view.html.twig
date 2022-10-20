@@ -22,7 +22,7 @@
         <div class="view-details">
             <img src="{{ park.image }}" alt="{{ park.name }}">
             <ul class="view-specs">
-                <li data-icon="&#xf0b0">{{ park.type }}</li>
+                <li data-icon="&#xf0b0">{{ park.displayType }}</li>
                 {% if park.website %}
                     <li data-icon="&#xf35d">
                         <a href="{{ park.website }}">

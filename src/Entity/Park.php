@@ -10,6 +10,12 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ParkRepository::class)]
 class Park
 {
+    const TYPES = [
+        0 => "Parc d'attractions",
+        1 => "Parc aquatique",
+        2 => "Parc de loisirs"
+    ];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -128,5 +134,12 @@ class Park
         }
 
         return $this;
+    }
+
+    /* --- Custom methods --- */
+
+    public function displayType(): string
+    {
+        return self::TYPES[$this->getType()];
     }
 }

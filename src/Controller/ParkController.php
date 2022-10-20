@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Park;
 use App\Repository\ParkRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,11 +11,8 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/park', name: 'park_')]
 class ParkController extends AbstractController
 {
-    private ParkRepository $parkRepository;
-
-    public function __construct(ParkRepository $parkRepository)
+    public function __construct(private ParkRepository $parkRepository)
     {
-        $this->parkRepository = $parkRepository;
     }
 
     #[Route('', name: 'list')]
@@ -28,10 +26,8 @@ class ParkController extends AbstractController
     }
 
     #[Route('/{id}', name: 'view', requirements: ["id" => "\d+"])]
-    public function view($id): Response
+    public function view(Park $park): Response
     {
-        $park = $this->parkRepository->find($id);
-
         return $this->render("park/view.html.twig", [
             'park' => $park,
         ]);
