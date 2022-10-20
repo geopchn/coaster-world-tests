@@ -17,6 +17,9 @@
         <h1 class="view-title">{{ coaster.name }}</h1>
         <a href="{{ path('park_view', {id: coaster.park.id}) }}" class="view-subtitle">
             {{ coaster.park.name }}
+            {% include "components/country-flag.html.twig" with {
+                country: coaster.park.address.country
+            } only %}
         </a>
 
         <div class="view-details">

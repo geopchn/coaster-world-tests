@@ -21,7 +21,12 @@
                 <img src="{{ park.image }}" alt="{{ park.name }}" class="card-image">
                 <div class="card-body">
                     <h2 class="card-title">{{ park.name }}</h2>
-                    <span class="card-subtitle">{{ park.address.city ~ ' - ' ~ park.address.country }}</span>
+                    <span class="card-subtitle">
+                        {{ park.address.city }}
+                        {% include "components/country-flag.html.twig" with {
+                            country: park.address.country
+                        } only %}
+                    </span>
                 </div>
             </a>
         {% endfor %}
