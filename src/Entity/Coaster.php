@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\CoasterRepository;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CoasterRepository::class)]
 class Coaster
@@ -17,28 +19,60 @@ class Coaster
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: "Veuillez saisir un nom")]
+    #[Assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: "Le nom doit comporter au moins {{ limit }} caractères",
+        maxMessage: "Le nom doit comporter au maximum {{ limit }} caractères",
+    )]
     #[ORM\Column(length: 50)]
     private ?string $name = null;
 
+    #[Assert\NotBlank(message: "Veuillez saisir une URL d'image")]
+    #[Assert\Url(
+        message: "Cette URL ne semble pas valide",
+        protocols: ["https"]
+    )]
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?DateTimeInterface $openedAt = null;
+    private ?DateTimeInterface $openedAt;
 
+    #[Assert\Range(
+        notInRangeMessage: 'La taille minimum doit être entre {{ min }}cm et {{ max }}cm',
+        min: 50,
+        max: 230,
+    )]
     #[ORM\Column(nullable: true)]
     private ?int $minimumHeight = null;
 
+    #[Assert\Range(
+        notInRangeMessage: 'La taille maximum doit être entre {{ min }}cm et {{ max }}cm',
+        min: 50,
+        max: 230,
+    )]
     #[ORM\Column(nullable: true)]
     private ?int $maximumHeight = null;
 
+    #[Assert\NotBlank(message: "Veuillez saisir une durée")]
+    #[Assert\LessThan(
+        value: "1970-01-01 01:00:00",
+        message: "L'attraction ne peut durer plus de 2 heures"
+    )]
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?DateTimeInterface $duration = null;
 
+    #[Assert\NotBlank(message: "Veuillez séléctionner un constructeur")]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Manufacturer $manufacturer = null;
 
+    #[Assert\Count(
+        min: 1,
+        minMessage: "Vous devez choisir au moins une catégorie"
+    )]
     #[ORM\ManyToMany(targetEntity: Tag::class)]
     private Collection $tags;
 
@@ -48,6 +82,7 @@ class Coaster
 
     public function __construct()
     {
+        $this->openedAt = new DateTime('2020-01-01');
         $this->tags = new ArrayCollection();
     }
 

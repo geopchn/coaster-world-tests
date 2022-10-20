@@ -2,8 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Coaster;
+use App\Form\CoasterType;
 use App\Repository\CoasterRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -38,8 +42,25 @@ class CoasterController extends AbstractController
     }
 
     #[Route('/create', name: 'create')]
-    public function form(): Response
+    public function form(Request $request, EntityManagerInterface $em): Response
     {
-        return new Response("Création d'une attraction");
+        $coaster = new Coaster();
+        $form = $this->createForm(CoasterType::class, $coaster);
+
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+//            $this->coasterRepository->save($coaster, true);
+            $em->persist($coaster);
+            $em->flush();
+
+            $this->addFlash("success", "Votre attraction a bien été créé");
+            return $this->redirectToRoute('coaster_view', [
+                'id' => $coaster->getId(),
+            ]);
+        }
+
+        return $this->render("coaster/form.html.twig", [
+            "form" => $form->createView(),
+        ]);
     }
 }
