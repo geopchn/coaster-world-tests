@@ -32,7 +32,7 @@ class CoasterController extends AbstractController
     }
 
     #[Route('/{id}', name: 'view', requirements: ["id" => "\d+"])]
-    public function view($id): Response
+    public function view(int $id): Response
     {
         $coaster = $this->coasterRepository->find($id);
 
@@ -42,9 +42,12 @@ class CoasterController extends AbstractController
     }
 
     #[Route('/create', name: 'create')]
-    public function form(Request $request, EntityManagerInterface $em): Response
+    #[Route('/{id}/edit', name: 'edit')]
+    public function form(Request $request, EntityManagerInterface $em, ?Coaster $coaster = null): Response
     {
-        $coaster = new Coaster();
+        if(!$coaster){
+            $coaster = new Coaster();
+        }
         $form = $this->createForm(CoasterType::class, $coaster);
 
         $form->handleRequest($request);
