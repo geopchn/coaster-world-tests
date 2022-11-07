@@ -51,5 +51,10 @@
                 </li>
             {% endfor %}
         </ul>
+
+        <div>
+            <a href="{{ path('coaster_edit', {id: coaster.id}) }}">Modifier</a>
+            <a href="{{ path('coaster_delete', {id: coaster.id}) }}">Supprimer</a>
+        </div>
     </div>
 {% endblock %}

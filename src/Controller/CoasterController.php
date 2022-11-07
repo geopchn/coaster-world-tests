@@ -16,10 +16,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class CoasterController extends AbstractController
 {
     private CoasterRepository $coasterRepository;
+    private EntityManagerInterface $em;
 
-    public function __construct(CoasterRepository $coasterRepository)
+    public function __construct(CoasterRepository $coasterRepository, EntityManagerInterface $em)
     {
         $this->coasterRepository = $coasterRepository;
+        $this->em = $em;
     }
 
     #[Route('', name: 'list')]
@@ -44,7 +46,7 @@ class CoasterController extends AbstractController
 
     #[Route('/create', name: 'create')]
     #[Route('/{id}/edit', name: 'edit')]
-    public function form(Request $request, EntityManagerInterface $em, FileService $fileService, ?Coaster $coaster = null): Response
+    public function form(Request $request, FileService $fileService, ?Coaster $coaster = null): Response
     {
         $isNew = false;
         if(!$coaster){
@@ -63,8 +65,8 @@ class CoasterController extends AbstractController
                 $coaster->setImage($name);
             }
 
-            $em->persist($coaster);
-            $em->flush();
+            $this->em->persist($coaster);
+            $this->em->flush();
 
             $message = sprintf("L'attraction a bien été %s", $isNew ? "créé" : "modifé");
             $this->addFlash("success", $message);
@@ -77,5 +79,14 @@ class CoasterController extends AbstractController
             "form" => $form->createView(),
             "isNew" => $isNew,
         ]);
+    }
+
+    #[Route('/{id}/delete', name: 'delete')]
+    public function delete(Coaster $coaster): Response
+    {
+        $this->em->remove($coaster);
+        $this->em->flush();
+        $this->addFlash("success", "Le coaster a bien été supprimé");
+        return $this->redirectToRoute("coaster_list");
     }
 }
