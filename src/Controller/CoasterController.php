@@ -7,6 +7,7 @@ use App\Form\CoasterType;
 use App\Repository\CoasterRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -43,7 +44,7 @@ class CoasterController extends AbstractController
 
     #[Route('/create', name: 'create')]
     #[Route('/{id}/edit', name: 'edit')]
-    public function form(Request $request, EntityManagerInterface $em, ?Coaster $coaster = null): Response
+    public function form(Request $request, EntityManagerInterface $em, FileSystem $fs, ?Coaster $coaster = null): Response
     {
         $isNew = false;
         if(!$coaster){
@@ -54,11 +55,19 @@ class CoasterController extends AbstractController
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-//            $this->coasterRepository->save($coaster, true);
+            if($imageFile = $coaster->getImageFile()){
+                $name = sprintf("%s.%s", uniqid("coaster-"), $imageFile->guessExtension());
+                $imageFile->move("data", $name);
+                if($oldImage = $coaster->getImage()){
+                    $fs->remove("." . $oldImage);
+                }
+                $coaster->setImage("/data/" . $name);
+            }
+
             $em->persist($coaster);
             $em->flush();
 
-            $message = "L'attraction a bien été " . ($isNew) ? "créé" : "modifé";
+            $message = sprintf("L'attraction a bien été %s", $isNew ? "créé" : "modifé");
             $this->addFlash("success", $message);
             return $this->redirectToRoute('coaster_view', [
                 'id' => $coaster->getId(),

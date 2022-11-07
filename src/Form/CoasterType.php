@@ -6,7 +6,7 @@ use App\Entity\Coaster;
 use App\Entity\Park;
 use App\Repository\ManufacturerRepository;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,12 +18,8 @@ class CoasterType extends AbstractType
             ->add('name', null, [
                 'label' => 'Nom de l\'attraction',
             ])
-            ->add('image', UrlType::class, [
-                'label' => 'Url de l\'image',
-                'default_protocol' => 'https',
-                'attr' => [
-                    'placeholder' => 'https://exemple.com/image.jpg',
-                ],
+            ->add('imageFile', FileType::class, [
+                'label' => 'Image',
             ])
             ->add('openedAt', null, [
                 'label' => 'Date d\'inauguration',

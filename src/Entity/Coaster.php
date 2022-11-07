@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CoasterRepository::class)]
@@ -29,13 +30,20 @@ class Coaster
     #[ORM\Column(length: 50)]
     private ?string $name = null;
 
-    #[Assert\NotBlank(message: "Veuillez saisir une URL d'image")]
-    #[Assert\Url(
-        message: "Cette URL ne semble pas valide",
-        protocols: ["https"]
-    )]
     #[ORM\Column(length: 255)]
     private ?string $image = null;
+
+    #[Assert\Expression(
+        "this.getImage() or this.getImageFile()",
+        message: 'Veuillez choisir une image',
+    )]
+    #[Assert\File(
+        maxSize: '2M',
+        mimeTypes: ['image/jpeg', 'image/png'],
+        maxSizeMessage: 'L\'image ne doit pas éxcéder 2Mo',
+        mimeTypesMessage: 'L\'image doit être au format JPEG ou PNG',
+    )]
+    private ?UploadedFile $imageFile = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?DateTimeInterface $openedAt;
@@ -111,6 +119,18 @@ class Coaster
     public function setImage(string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getImageFile(): ?UploadedFile
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageFile(?UploadedFile $imageFile): self
+    {
+        $this->imageFile = $imageFile;
 
         return $this;
     }
