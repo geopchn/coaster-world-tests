@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Coaster;
 use App\Form\CoasterType;
 use App\Repository\CoasterRepository;
+use App\Service\FileService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
@@ -44,7 +45,7 @@ class CoasterController extends AbstractController
 
     #[Route('/create', name: 'create')]
     #[Route('/{id}/edit', name: 'edit')]
-    public function form(Request $request, EntityManagerInterface $em, FileSystem $fs, ?Coaster $coaster = null): Response
+    public function form(Request $request, EntityManagerInterface $em, FileSystem $fs, FileService $fileService, ?Coaster $coaster = null): Response
     {
         $isNew = false;
         if(!$coaster){
