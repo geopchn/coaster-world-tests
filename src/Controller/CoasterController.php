@@ -8,7 +8,6 @@ use App\Repository\CoasterRepository;
 use App\Service\FileService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -45,7 +44,7 @@ class CoasterController extends AbstractController
 
     #[Route('/create', name: 'create')]
     #[Route('/{id}/edit', name: 'edit')]
-    public function form(Request $request, EntityManagerInterface $em, FileSystem $fs, FileService $fileService, ?Coaster $coaster = null): Response
+    public function form(Request $request, EntityManagerInterface $em, FileService $fileService, ?Coaster $coaster = null): Response
     {
         $isNew = false;
         if(!$coaster){
@@ -57,12 +56,11 @@ class CoasterController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             if($imageFile = $coaster->getImageFile()){
-                $name = sprintf("%s.%s", uniqid("coaster-"), $imageFile->guessExtension());
-                $imageFile->move("data", $name);
+                $name = $fileService->upload($imageFile, "coaster");
                 if($oldImage = $coaster->getImage()){
-                    $fs->remove("." . $oldImage);
+                    $fileService->remove($oldImage);
                 }
-                $coaster->setImage("/data/" . $name);
+                $coaster->setImage($name);
             }
 
             $em->persist($coaster);

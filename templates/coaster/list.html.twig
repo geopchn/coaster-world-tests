@@ -20,7 +20,7 @@
     <div class="coaster-list">
         {% for coaster in coasters %}
             <a href="{{ path('coaster_view', {id: coaster.id}) }}" class="card">
-                <img src="{{ coaster.image }}" alt="{{ coaster.name }}" class="card-image">
+                <img src="{{ asset('data/' ~ coaster.image) }}" alt="{{ coaster.name }}" class="card-image">
                 <div class="card-body">
                     <h2 class="card-title">{{ coaster.name }}</h2>
                     <span class="card-subtitle">{{ coaster.park.name }}</span>

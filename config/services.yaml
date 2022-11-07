@@ -1,6 +1,9 @@
 parameters:
     address:
         countryFlagBaseUrl: "https://countryflagsapi.com/svg/"
+    file:
+        uploadDirectory: "%kernel.project_dir%/public/data"
+
 
 services:
     _defaults:

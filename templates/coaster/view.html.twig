@@ -23,7 +23,7 @@
         </a>
 
         <div class="view-details">
-            <img src="{{ coaster.image }}" alt="{{ coaster.name }}">
+            <img src="{{ asset('data/' ~ coaster.image) }}" alt="{{ coaster.name }}">
             <ul class="view-specs">
                 <li data-icon="&#xf85e">{{ coaster.manufacturer.name }}</li>
                 <li data-icon="&#xf073">{{ coaster.openedAt ? coaster.openedAt|date("m/Y") : "Prochainement" }}</li>
