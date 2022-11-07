@@ -45,8 +45,10 @@ class CoasterController extends AbstractController
     #[Route('/{id}/edit', name: 'edit')]
     public function form(Request $request, EntityManagerInterface $em, ?Coaster $coaster = null): Response
     {
+        $isNew = false;
         if(!$coaster){
             $coaster = new Coaster();
+            $isNew = true;
         }
         $form = $this->createForm(CoasterType::class, $coaster);
 
@@ -56,7 +58,8 @@ class CoasterController extends AbstractController
             $em->persist($coaster);
             $em->flush();
 
-            $this->addFlash("success", "Votre attraction a bien été créé");
+            $message = "L'attraction a bien été " . ($isNew) ? "créé" : "modifé";
+            $this->addFlash("success", $message);
             return $this->redirectToRoute('coaster_view', [
                 'id' => $coaster->getId(),
             ]);
@@ -64,6 +67,7 @@ class CoasterController extends AbstractController
 
         return $this->render("coaster/form.html.twig", [
             "form" => $form->createView(),
+            "isNew" => $isNew,
         ]);
     }
 }

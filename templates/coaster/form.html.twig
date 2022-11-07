@@ -1,11 +1,13 @@
 {% extends 'base.html.twig' %}
 
+{% set action = isNew ? "Création" : "Modification" %}
+
 {% block title %}
-    Création d'une attraction - {{ parent() }}
+    {{ action }} d'une attraction - {{ parent() }}
 {% endblock %}
 
 {% block body %}
-    <h1>Création d'une attraction</h1>
+    <h1>{{ action }} d'une attraction</h1>
 
     {{ form_start(form) }}
 
