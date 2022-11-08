@@ -3,7 +3,12 @@ parameters:
         countryFlagBaseUrl: "https://countryflagsapi.com/svg/"
     file:
         uploadDirectory: "%kernel.project_dir%/public/data"
-
+    weather:
+        key: '%env(WEATHER_API_KEY)%'
+        url: "https://api.openweathermap.org"
+        endpoints:
+            geocoding: "/geo/1.0/direct"
+            forecast: "/data/2.5/forecast"
 
 services:
     _defaults:
