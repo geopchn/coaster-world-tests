@@ -5,10 +5,13 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity('email', message: "Cet e-mail existe déjo dans notre base de données")]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -16,6 +19,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: "Veuillez saisir une adresse e-mail")]
+    #[Assert\Email(
+        message: "Cette adresse n'est pas valide",
+        mode: "strict"
+    )]
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
@@ -25,11 +33,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[Assert\NotBlank(message: "Veuillez saisir un mot de passe")]
+    #[Assert\Length(
+        min: 8,
+        max: 32,
+        minMessage: "Votre mot de passe doit contenir au moins {{ limit }} caractères",
+        maxMessage: "Votre mot de passe doit contenir au maximum {{ limit }} caractères",
+    )]
+    #[Assert\NotCompromisedPassword(
+        message: "Oops, ce mot de passe semble avoir fait l'objet d'une fuite chez un autre service en ligne",
+    )]
+    private ?string $plainPassword = null;
+
+    #[Assert\NotBlank(message: "Veuillez saisir un nom d'utilisateur")]
+    #[Assert\Length(
+        min: 3,
+        max: 30,
+        minMessage: "Votre nom d'utilisateur doit contenir au moins {{ limit }} caractères",
+        maxMessage: "Votre nom d'utilisateur doit contenir au maximum {{ limit }} caractères",
+    )]
     #[ORM\Column(length: 30)]
     private ?string $username = null;
 
     #[ORM\Column]
     private ?DateTimeImmutable $createdAt = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
@@ -75,6 +107,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
     public function getUsername(): ?string
     {
         return $this->username;
@@ -106,7 +150,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials()
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+         $this->plainPassword = null;
     }
 }
