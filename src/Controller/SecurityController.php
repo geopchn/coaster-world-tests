@@ -35,4 +35,11 @@ class SecurityController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    // TODO - Afficher l'erreur et le dernier nom d'utilisateur saisie
+    #[Route('/login', name: 'login')]
+    public function login(): Response
+    {
+        return $this->render('security/login.html.twig');
+    }
 }

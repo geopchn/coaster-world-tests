@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Connexion - {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <h1>Connexion</h1>
+
+    <form method="post">
+        <div>
+            <label for="inputEmail">E-mail</label>
+            <input type="email" name="email" id="inputEmail">
+        </div>
+        <div>
+            <label for="inputPassword">Mot de passe</label>
+            <input type="password" name="password" id="inputPassword">
+        </div>
+        <button>Connexion</button>
+    </form>
+{% endblock %}
