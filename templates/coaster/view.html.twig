@@ -52,9 +52,14 @@
             {% endfor %}
         </ul>
 
-        <div>
-            <a href="{{ path('coaster_edit', {id: coaster.id}) }}">Modifier</a>
-            <a href="{{ path('coaster_delete', {id: coaster.id}) }}">Supprimer</a>
-        </div>
+            <div>
+                {% if is_granted('RESOURCE_WRITE', coaster) %}
+                    <a href="{{ path('coaster_edit', {id: coaster.id}) }}">Modifier</a>
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('coaster_delete', {id: coaster.id}) }}">Supprimer</a>
+                {% endif %}
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

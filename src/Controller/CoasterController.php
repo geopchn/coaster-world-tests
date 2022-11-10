@@ -7,6 +7,7 @@ use App\Form\CoasterType;
 use App\Repository\CoasterRepository;
 use App\Service\FileService;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,6 +47,7 @@ class CoasterController extends AbstractController
 
     #[Route('/create', name: 'create')]
     #[Route('/{id}/edit', name: 'edit')]
+    #[IsGranted("RESOURCE_WRITE", "coaster")]
     public function form(Request $request, FileService $fileService, ?Coaster $coaster = null): Response
     {
         $isNew = false;
@@ -82,6 +84,7 @@ class CoasterController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'delete')]
+    #[IsGranted("ROLE_ADMIN")]
     public function delete(Coaster $coaster): Response
     {
         $this->em->remove($coaster);

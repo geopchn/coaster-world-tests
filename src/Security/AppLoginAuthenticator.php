@@ -15,8 +15,9 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
+use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 
-class AppLoginAuthenticator extends AbstractAuthenticator
+class AppLoginAuthenticator extends AbstractAuthenticator implements AuthenticationEntryPointInterface
 {
     const LOGIN_ROUTE = 'security_login';
     private RouterInterface $router;
@@ -73,18 +74,17 @@ class AppLoginAuthenticator extends AbstractAuthenticator
         $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
         $request->getSession()->set(Security::LAST_USERNAME, $request->request->get('email'));
 
+        return $this->redirectToLogin();
+    }
+
+    public function start(Request $request, AuthenticationException $authException = null): Response
+    {
+        return $this->redirectToLogin();
+    }
+
+    private function redirectToLogin(): Response
+    {
         $url = $this->router->generate(self::LOGIN_ROUTE);
         return new RedirectResponse($url);
     }
-
-//    public function start(Request $request, AuthenticationException $authException = null): Response
-//    {
-//        /*
-//         * If you would like this class to control what happens when an anonymous user accesses a
-//         * protected page (e.g. redirect to /login), uncomment this method and make this class
-//         * implement Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface.
-//         *
-//         * For more details, see https://symfony.com/doc/current/security/experimental_authenticators.html#configuring-the-authentication-entry-point
-//         */
-//    }
 }

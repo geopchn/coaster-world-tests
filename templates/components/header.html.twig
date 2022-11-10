@@ -13,12 +13,21 @@
         </ul>
         <div class="nav-separator"></div>
         <ul>
-            <li>
-                <a href="{{ path('security_login') }}">Connexion</a>
-            </li>
-            <li>
-                <a href="{{ path('security_register') }}">Inscription</a>
-            </li>
+            {% if app.user %}
+                <li>
+                    {{ app.user.username }}
+                </li>
+                <li>
+                    <a href="{{ path('security_logout') }}">Déconnexion</a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{{ path('security_login') }}">Connexion</a>
+                </li>
+                <li>
+                    <a href="{{ path('security_register') }}">Inscription</a>
+                </li>
+            {% endif %}
         </ul>
     </nav>
 </header>
