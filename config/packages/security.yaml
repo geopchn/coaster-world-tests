@@ -16,6 +16,14 @@ security:
             lazy: true
             provider: app_user_provider
             custom_authenticator: App\Security\AppLoginAuthenticator
+            logout:
+                path: security_logout
+                target: main_home
+            remember_me:
+                secret: '%kernel.secret%'
+                name: KEEPCONNECT
+                lifetime: 604800
+                remember_me_parameter: remember_me
 
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }

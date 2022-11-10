@@ -20,6 +20,10 @@
             <label for="inputPassword">Mot de passe</label>
             <input type="password" name="password" id="inputPassword">
         </div>
+        <div>
+            <input type="checkbox" name="remember_me" id="rememberMe">
+            <label for="rememberMe">Rester connecté</label>
+        </div>
         <button>Connexion</button>
         <input type="hidden" name="token" value="{{ csrf_token('authentication') }}">
     </form>

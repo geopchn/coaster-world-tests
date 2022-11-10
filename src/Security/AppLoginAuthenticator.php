@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
@@ -51,7 +52,10 @@ class AppLoginAuthenticator extends AbstractAuthenticator
         return new Passport(
             new UserBadge($email),
             new PasswordCredentials($password),
-            [new CsrfTokenBadge('authentication', $csrfToken)]
+            [
+                new CsrfTokenBadge('authentication', $csrfToken),
+                new RememberMeBadge()
+            ]
         );
     }
 
@@ -69,9 +73,8 @@ class AppLoginAuthenticator extends AbstractAuthenticator
         $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
         $request->getSession()->set(Security::LAST_USERNAME, $request->request->get('email'));
 
-        return null;
-//        $url = $this->router->generate(self::LOGIN_ROUTE);
-//        return new RedirectResponse($url);
+        $url = $this->router->generate(self::LOGIN_ROUTE);
+        return new RedirectResponse($url);
     }
 
 //    public function start(Request $request, AuthenticationException $authException = null): Response
