@@ -14,12 +14,13 @@
     <form method="post">
         <div>
             <label for="inputEmail">E-mail</label>
-            <input type="email" name="email" id="inputEmail">
+            <input type="email" name="email" id="inputEmail" value="{{ lastUsername }}">
         </div>
         <div>
             <label for="inputPassword">Mot de passe</label>
             <input type="password" name="password" id="inputPassword">
         </div>
         <button>Connexion</button>
+        <input type="hidden" name="token" value="{{ csrf_token('authentication') }}">
     </form>
 {% endblock %}
