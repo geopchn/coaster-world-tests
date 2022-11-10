@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 #[Route('', name: 'security_')]
 class SecurityController extends AbstractController
@@ -36,10 +37,13 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    // TODO - Afficher l'erreur et le dernier nom d'utilisateur saisie
     #[Route('/login', name: 'login')]
-    public function login(): Response
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        return $this->render('security/login.html.twig');
+        $error = $authenticationUtils->getLastAuthenticationError();
+
+        return $this->render('security/login.html.twig', [
+            'error' => $error,
+        ]);
     }
 }

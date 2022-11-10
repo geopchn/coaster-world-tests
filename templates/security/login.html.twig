@@ -7,6 +7,10 @@
 {% block body %}
     <h1>Connexion</h1>
 
+    {% if error %}
+        <p>{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+    {% endif %}
+
     <form method="post">
         <div>
             <label for="inputEmail">E-mail</label>
