@@ -72,9 +72,6 @@ class CoasterType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Coaster::class, // "App\Entity\Coaster"
-            'attr' => [
-                'novalidate' => 'novalidate',
-            ]
         ]);
     }
 }

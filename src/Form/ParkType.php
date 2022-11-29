@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\Park;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,7 +18,7 @@ class ParkType extends AbstractType
                 'label' => 'Nom',
             ])
             ->add('imageFile', null, [
-                'label' => 'Image'
+                'label' => 'Image',
             ])
             ->add('type', ChoiceType::class, [
                 'label' => 'Type de parc',
@@ -39,9 +38,6 @@ class ParkType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Park::class,
-            'attr' => [
-                'novalidate' => 'novalidate',
-            ]
         ]);
     }
 }
