@@ -8,6 +8,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -16,7 +18,12 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     #[Route('/register', name: 'register')]
-    public function register(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher): Response
+    public function register(
+        Request $request,
+        EntityManagerInterface $em,
+        MailerInterface $mailer,
+        UserPasswordHasherInterface $hasher
+    ): Response
     {
         if ($this->getUser()) {
             return $this->redirectToRoute('main_home');
@@ -32,6 +39,14 @@ class SecurityController extends AbstractController
 
             $em->persist($user);
             $em->flush();
+
+            $mail = new Email();
+            $mail->from('noreply@coaster-world.com');
+            $mail->to($user->getEmail());
+            $mail->subject('Confirmation d\'inscription');
+            $mail->text('Votre compte a bien été créé');
+            $mailer->send($mail);
+
             $this->addFlash('success', 'Votre compte a bien été créé');
             return $this->redirectToRoute('main_home');
         }
