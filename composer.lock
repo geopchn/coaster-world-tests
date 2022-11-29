@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ceb98eef30c2e5c694b68e3d5cf612c4",
+    "content-hash": "974dffc52c809b6c31efccfd99aeadc3",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1871,6 +1871,47 @@
                 "source": "https://github.com/sensiolabs/SensioFrameworkExtraBundle/tree/v6.2.8"
             },
             "time": "2022-09-05T16:44:56+00:00"
+        },
+        {
+            "name": "stephanebour/disposable-email-domains",
+            "version": "v1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/StephaneBour/disposable-email-domains.git",
+                "reference": "ed98b653a4b818f733d724f5de7b80d703012913"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/StephaneBour/disposable-email-domains/zipball/ed98b653a4b818f733d724f5de7b80d703012913",
+                "reference": "ed98b653a4b818f733d724f5de7b80d703012913",
+                "shasum": ""
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.14",
+                "phpunit/phpunit": "^5.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "StephaneBour\\Disposable\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stéphane Bour",
+                    "email": "github@stephp.fr"
+                }
+            ],
+            "description": "A list of disposable email domains",
+            "support": {
+                "issues": "https://github.com/StephaneBour/disposable-email-domains/issues",
+                "source": "https://github.com/StephaneBour/disposable-email-domains/tree/master"
+            },
+            "time": "2020-05-05T11:33:11+00:00"
         },
         {
             "name": "symfony/asset",

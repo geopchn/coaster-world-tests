@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use App\Validator as CustomAssert;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -24,6 +25,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         message: "Cette adresse n'est pas valide",
         mode: "strict"
     )]
+    #[CustomAssert\TemporaryEmail]
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
