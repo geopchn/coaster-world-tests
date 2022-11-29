@@ -18,7 +18,7 @@
     <div class="coaster-list">
         {% for park in parks %}
             <a href="{{ path('park_view', {id: park.id}) }}" class="card">
-                <img src="{{ park.image }}" alt="{{ park.name }}" class="card-image">
+                <img src="{{ asset('data/' ~ park.image) }}" alt="{{ park.name }}" class="card-image">
                 <div class="card-body">
                     <h2 class="card-title">{{ park.name }}</h2>
                     <span class="card-subtitle">

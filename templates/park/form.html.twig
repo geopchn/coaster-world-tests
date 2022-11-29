@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% set action = isNew ? "Création" : "Modification" %}
+
+{% block title %}
+    {{ action }} d'un parc - {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ action }} d'un parc</h1>
+
+    {{ form_start(form) }}
+
+    {{ form_row(form.name) }}
+    {{ form_row(form.imageFile) }}
+    {{ form_row(form.type) }}
+    {{ form_row(form.website) }}
+    {{ form_row(form.address) }}
+
+    <button>Enregistrer</button>
+
+    {{ form_end(form) }}
+{% endblock %}

@@ -6,6 +6,9 @@ use App\Repository\ParkRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: ParkRepository::class)]
 class Park
@@ -21,18 +24,40 @@ class Park
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: "Veuillez saisir un nom")]
+    #[Assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: "Le nom doit comporter au moins {{ limit }} caractères",
+        maxMessage: "Le nom doit comporter au maximum {{ limit }} caractères",
+    )]
     #[ORM\Column(length: 50)]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
+    #[Assert\Expression(
+        "this.getImage() or this.getImageFile()",
+        message: 'Veuillez choisir une image',
+    )]
+    #[Assert\File(
+        maxSize: '2M',
+        mimeTypes: ['image/jpeg', 'image/png'],
+        maxSizeMessage: 'L\'image ne doit pas éxcéder 2Mo',
+        mimeTypesMessage: 'L\'image doit être au format JPEG ou PNG',
+    )]
+    private ?UploadedFile $imageFile = null;
+
+    #[Assert\NotBlank(message: "Veuillez choisir un type")]
     #[ORM\Column]
     private ?int $type = null;
 
+    #[Assert\Url(message: "Vous devez saisir une URL valide")]
     #[ORM\Column(length: 250, nullable: true)]
     private ?string $website = null;
 
+    #[Assert\Valid]
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Address $address = null;
@@ -70,6 +95,18 @@ class Park
     public function setImage(string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getImageFile(): ?UploadedFile
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageFile(?UploadedFile $imageFile): self
+    {
+        $this->imageFile = $imageFile;
 
         return $this;
     }
