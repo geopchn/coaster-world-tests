@@ -52,14 +52,20 @@
             {% endfor %}
         </ul>
 
-            <div>
-                {% if is_granted('RESOURCE_WRITE', coaster) %}
-                    <a href="{{ path('coaster_edit', {id: coaster.id}) }}">Modifier</a>
-                {% endif %}
-                {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('coaster_delete', {id: coaster.id}) }}">Supprimer</a>
-                {% endif %}
-            </div>
-        {% endif %}
+        <div>
+            {% if is_granted('RESOURCE_WRITE', coaster) %}
+                <a href="{{ path('coaster_edit', {id: coaster.id}) }}">Modifier</a>
+            {% endif %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('coaster_delete', {id: coaster.id}) }}">Supprimer</a>
+            {% endif %}
+        </div>
+
+        <h2>Attractions similaires</h2>
+        <ul>
+            {% for similarCoaster in similarCoasters %}
+                <li>{{ similarCoaster.name }}</li>
+            {% endfor %}
+        </ul>
     </div>
 {% endblock %}

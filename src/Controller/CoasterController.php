@@ -39,9 +39,11 @@ class CoasterController extends AbstractController
     public function view(int $id): Response
     {
         $coaster = $this->coasterRepository->find($id);
+        $similarCoasters = $this->coasterRepository->findSimilar($coaster);
 
         return $this->render("coaster/view.html.twig", [
-            "coaster" => $coaster,
+            'coaster' => $coaster,
+            'similarCoasters' => $similarCoasters,
         ]);
     }
 

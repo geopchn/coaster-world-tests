@@ -31,28 +31,34 @@ class CoasterRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Coaster[] Returns an array of Coaster objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findSimilar(Coaster $coaster)
+    {
+        $qb = $this->createQueryBuilder('c');
 
-//    public function findOneBySomeField($value): ?Coaster
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+//        $qb->where(':tags MEMBER OF c.tags');
+//        $qb->orWhere('c.manufacturer = :manufacturer');
+//        $qb->andWhere('c.id != :id');
+
+//        $qb->where($qb->expr()->isMemberOf(':tags', 'c.tags'));
+//        $qb->orWhere($qb->expr()->eq('c.manufacturer', ':manufacturer'));
+//        $qb->andWhere($qb->expr()->neq('c.id', ':id'));
+
+        $qb->where(
+            $qb->expr()->andX(
+                $qb->expr()->orX(
+                    $qb->expr()->isMemberOf(':tags', 'c.tags'),
+                    $qb->expr()->eq('c.manufacturer', ':manufacturer')
+                ),
+                $qb->expr()->neq('c.id', ':id')
+            )
+        );
+
+        $qb->setParameter('tags', $coaster->getTags());
+        $qb->setParameter('manufacturer', $coaster->getManufacturer());
+        $qb->setParameter('id', $coaster->getId());
+
+        $qb->orderBy('RAND()');
+        $qb->setMaxResults(5);
+        return $qb->getQuery()->getResult();
+    }
 }
