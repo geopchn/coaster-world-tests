@@ -4,12 +4,11 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegisterType;
+use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -21,7 +20,7 @@ class SecurityController extends AbstractController
     public function register(
         Request $request,
         EntityManagerInterface $em,
-        MailerInterface $mailer,
+        MailerService $mailerService,
         UserPasswordHasherInterface $hasher
     ): Response
     {
@@ -40,13 +39,10 @@ class SecurityController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            $mail = new Email();
-            $mail->from('noreply@coaster-world.com');
-            $mail->to($user->getEmail());
-            $mail->subject('Confirmation d\'inscription');
-            $mail->text('Votre compte a bien été créé');
-            $mailer->send($mail);
-
+            $success = $mailerService->sendRegistrationConfirmation($user);
+            if (!$success) {
+                $this->addFlash('warning', 'Nous n\'avons pas pu vous envoyer le mail de confirmation');
+            }
             $this->addFlash('success', 'Votre compte a bien été créé');
             return $this->redirectToRoute('main_home');
         }

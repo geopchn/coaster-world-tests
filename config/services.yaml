@@ -9,6 +9,9 @@ parameters:
         endpoints:
             geocoding: "/geo/1.0/direct"
             forecast: "/data/2.5/forecast"
+    mailer:
+        senderAddress: 'noreply@coaster-world.com'
+        templateFolder: 'mail/'
 
 services:
     _defaults:
@@ -21,4 +24,3 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-
