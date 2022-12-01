@@ -33,8 +33,13 @@ class ParkController extends AbstractController
     #[Route('/{id}', name: 'view', requirements: ["id" => "\d+"])]
     public function view(Park $park): Response
     {
+        $statistics = [
+            'manufacturerCounter' => $this->parkRepository->countManufacturers($park),
+        ];
+
         return $this->render("park/view.html.twig", [
             'park' => $park,
+            'statistics' => $statistics,
         ]);
     }
 
