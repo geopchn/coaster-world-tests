@@ -71,11 +71,11 @@
         <a href="{{ path('coaster_experience', {
             id: coaster.id,
             is_done: 0
-        }) }}">Je veux faire cette attraction</a>
+        }) }}">{{ experience_button_label(0, coaster) }}</a>
 
         <a href="{{ path('coaster_experience', {
             id: coaster.id,
             is_done: 1
-        }) }}">J'ai fais cette attraction</a>
+        }) }}">{{ experience_button_label(1, coaster) }}</a>
     </div>
 {% endblock %}
