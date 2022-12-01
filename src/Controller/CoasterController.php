@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Coaster;
+use App\Entity\UserExperience;
 use App\Form\CoasterType;
 use App\Repository\CoasterRepository;
 use App\Service\FileService;
@@ -40,6 +41,10 @@ class CoasterController extends AbstractController
     {
         $coaster = $this->coasterRepository->find($id);
         $similarCoasters = $this->coasterRepository->findSimilar($coaster);
+
+        // Ajouter deux boutons pour mettre en "à faire" ou en "fait" l'attraction
+        // - Créer une nouvelle entité UserExperience et remplir ses informations
+        // - Sauvegarder l'entité
 
         return $this->render("coaster/view.html.twig", [
             'coaster' => $coaster,
@@ -93,5 +98,21 @@ class CoasterController extends AbstractController
         $this->em->flush();
         $this->addFlash("success", "Le coaster a bien été supprimé");
         return $this->redirectToRoute("coaster_list");
+    }
+
+    #[Route('/{id}/experience', name: "experience")]
+    public function experience(Request $request, Coaster $coaster): Response
+    {
+        $experience = new UserExperience();
+        $experience->setCoaster($coaster);
+
+        $user = $this->getUser();
+        $experience->setUser($user);
+
+        $experience->setIsDone($request->query->get('is_done'));
+
+        return $this->redirectToRoute('coaster_view', [
+           'id' => $coaster->getId(),
+        ]);
     }
 }
