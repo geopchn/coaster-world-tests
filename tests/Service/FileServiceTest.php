@@ -8,42 +8,59 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileServiceTest extends KernelTestCase
 {
-    private static Container $container;
-    private static array $config;
-    private static FileService $fileService;
+    private Container $container;
+    private array $config;
+    private FileService $fileService;
 
-    public static function setUpBeforeClass(): void
+    private static string $testFilename;
+
+    public function setUp(): void
     {
         self::bootKernel();
-        self::$container = static::getContainer();
-        self::$config = self::$container->get(ParameterBagInterface::class)->get('file');
-        self::$fileService = self::$container->get(FileService::class);
+        $this->container = static::getContainer();
+        $this->config = $this->container->get(ParameterBagInterface::class)->get('file');
+        $this->fileService = $this->container->get(FileService::class);
     }
 
-    public function testRemove(): void
+    public function testUpload(): void
     {
-        $container = static::getContainer();
-        $filesystem = $container->get(Filesystem::class);
+        $filesystem = $this->container->get(Filesystem::class);
 
         $name = 'test.txt';
-        $path = sprintf('%s/%s', self::$config['uploadDirectory'], $name);
-        $filesystem->dumpFile($path, "");
+        $content = 'bonjour';
+        $tempPath = 'data/' . $name;
+        $filesystem->dumpFile($tempPath, $content);
 
-        self::$fileService->remove($name);
+        $uploadedFile = new UploadedFile($tempPath, $name, test: true);
+        self::$testFilename = $this->fileService->upload($uploadedFile, 'test');
 
-        $this->assertFileDoesNotExist($path);
+        $this->assertIsString(self::$testFilename);
     }
 
+    /**
+     * @depends testUpload
+     */
     public function testBuildPath(): void
     {
-        $name = 'test-file.jpg';
-        $realPath = sprintf('%s/%s', self::$config['uploadDirectory'], $name);
-
-        $buildedPath = TestHelper::callMethod(self::$fileService, 'buildPath', [$name]);
+        $realPath = sprintf('%s/%s', $this->config['uploadDirectory'], self::$testFilename);
+        $buildedPath = TestHelper::callMethod($this->fileService, 'buildPath', [self::$testFilename]);
 
         $this->assertEquals($realPath, $buildedPath);
+        $this->assertFileExists($buildedPath);
+    }
+
+    /**
+     * @depends testBuildPath
+     */
+    public function testRemove(): void
+    {
+        $this->fileService->remove(self::$testFilename);
+
+        $buildedPath = TestHelper::callMethod($this->fileService, 'buildPath', [self::$testFilename]);
+        $this->assertFileDoesNotExist($buildedPath);
     }
 }
