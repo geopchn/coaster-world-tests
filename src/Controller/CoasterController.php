@@ -43,10 +43,6 @@ class CoasterController extends AbstractController
         $coaster = $this->coasterRepository->find($id);
         $similarCoasters = $this->coasterRepository->findSimilar($coaster);
 
-        // Ajouter deux boutons pour mettre en "à faire" ou en "fait" l'attraction
-        // - Créer une nouvelle entité UserExperience et remplir ses informations
-        // - Sauvegarder l'entité
-
         return $this->render("coaster/view.html.twig", [
             'coaster' => $coaster,
             'similarCoasters' => $similarCoasters,
