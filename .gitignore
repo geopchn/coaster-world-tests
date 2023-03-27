@@ -21,3 +21,8 @@ yarn-error.log
 
 # Upload folder
 /public/data
+
+# Tests
+.phpunit.result.cache
+/phpunit.xml
+
