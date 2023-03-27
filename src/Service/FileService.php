@@ -26,8 +26,13 @@ class FileService
 
     public function remove(string $name): void
     {
-        $path = sprintf("%s/%s", $this->config["uploadDirectory"], $name);
+        $path = $this->buildPath($name);
         $this->filesystem->remove($path);
+    }
+
+    private function buildPath(string $name): string
+    {
+        return sprintf('%s/%s', $this->config['uploadDirectory'], $name);
     }
 
     private function generateName(string $prefix, string $extension): string
