@@ -19,5 +19,10 @@ class CoasterRepositoryTest extends KernelTestCase
     {
         $coaster = $this->coasterRepository->findOneBy([]);
 
+        $similarCoasters = $this->coasterRepository->findSimilar($coaster);
+
+        $this->assertIsIterable($similarCoasters);
+        $this->assertLessThanOrEqual(5, count($similarCoasters));
+
     }
 }
