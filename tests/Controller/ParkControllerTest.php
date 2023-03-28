@@ -55,7 +55,7 @@ class ParkControllerTest extends WebTestCase
 
         $client->request('GET', sprintf('/park/%s', $park->getId()));
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextSame('a', 'Supprimer le parc');
+        $this->assertSelectorTextSame('a.park-delete-link', 'Supprimer le parc');
 
         $client->clickLink('Supprimer le parc');
 

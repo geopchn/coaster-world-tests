@@ -36,6 +36,10 @@
             </ul>
         </div>
 
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('park_delete', {id: park.id}) }}" class="park-delete-link">Supprimer le parc</a>
+        {% endif %}
+
         {% include 'components/weather-widget.html.twig' with {
             address: park.address
         } only %}

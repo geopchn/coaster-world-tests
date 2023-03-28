@@ -80,4 +80,14 @@ class ParkController extends AbstractController
             "isNew" => $isNew,
         ]);
     }
+
+    #[Route('/{id}/delete', name: 'delete')]
+    #[IsGranted("ROLE_ADMIN")]
+    public function delete(Park $park): Response
+    {
+        $this->em->remove($park);
+        $this->em->flush();
+        $this->addFlash("success", "Le parc a bien été supprimé");
+        return $this->redirectToRoute("park_list");
+    }
 }
