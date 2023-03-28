@@ -4,7 +4,7 @@ namespace App\Util\Twig;
 
 use App\Entity\Coaster;
 use App\Repository\UserExperienceRepository;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Extension\RuntimeExtensionInterface;
 
 class ExperienceButtonLabelRuntime implements RuntimeExtensionInterface
